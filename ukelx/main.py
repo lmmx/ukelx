@@ -19,8 +19,13 @@ async def root(request: Request):
     return templates.TemplateResponse("index.html", context)
 
 
-@app.get("/constituencies", response_model=list[ConstituencyDetail])
-async def get_constituencies():
+@app.get("/constituencies", response_class=HTMLResponse)
+async def get_constituencies(request: Request):
+    return templates.TemplateResponse("components/constituencies_list.html", {"request": request, "constituencies": constituencies})
+
+
+@app.get("/constituencies_json", response_model=list[ConstituencyDetail])
+async def get_constituencies_json():
     return constituencies
 
 

@@ -1,0 +1,13 @@
+v class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    {% for constituency in constituencies %}
+    <div class="bg-white shadow rounded-lg p-4">
+        <h2 class="text-xl font-semibold mb-2">{{ constituency.name }}</h2>
+        <p><strong>Candidate:</strong> {{ constituency.candidate }}</p>
+        <p><strong>Party:</strong> {{ constituency.party_code }}</p>
+        <p><strong>Votes:</strong> {{ constituency.vote_number }} ({{ constituency.vote_share }}%)</p>
+        <p><strong>Result:</strong> {{ constituency.result_2024 }}</p>
+        <p><strong>Majority:</strong> {{ constituency.majority_2024_number }} ({{ constituency.majority_2024_percent }}%)</p>
+        <p><strong>Turnout:</strong> {{ constituency.turnout_2024_number }} ({{ constituency.turnout_2024_percent }}%)</p>
+    </div>
+    {% endfor %}
+</div>

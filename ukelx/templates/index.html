@@ -21,38 +21,5 @@
             Loading constituencies...
         </div>
     </div>
-
-    <template id="constituency-template">
-        <div class="bg-white shadow rounded-lg p-4 mb-4">
-            <h2 class="text-xl font-semibold mb-2">{name}</h2>
-            <p><strong>Candidate:</strong> {candidate}</p>
-            <p><strong>Party:</strong> {party_code}</p>
-            <p><strong>Votes:</strong> {vote_number} ({vote_share}%)</p>
-            <p><strong>Result:</strong> {result_2024}</p>
-            <p><strong>Majority:</strong> {majority_2024_number} ({majority_2024_percent}%)</p>
-            <p><strong>Turnout:</strong> {turnout_2024_number} ({turnout_2024_percent}%)</p>
-        </div>
-    </template>
-
-    <script>
-        htmx.onLoad(function(content) {
-            if (content.id === "constituencies-list") {
-                const template = document.getElementById("constituency-template");
-                const container = document.getElementById("constituencies-list");
-                container.innerHTML = "";
-
-                content.forEach(function(constituency) {
-                    const constituencyElement = template.content.cloneNode(true);
-                    constituencyElement.innerHTML = constituencyElement.innerHTML.replace(
-                        /{(\w+)}/g,
-                        function(match, p1) {
-                            return constituency[p1] !== undefined ? constituency[p1] : match;
-                        }
-                    );
-                    container.appendChild(constituencyElement);
-                });
-            }
-        });
-    </script>
 </body>
 </html>
