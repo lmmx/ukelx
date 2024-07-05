@@ -46,13 +46,13 @@ def sync_fetch_json(url: str) -> dict:
     return response.json()
 
 
-def preprocess_data(ids: list[str]):
+def preprocess_data(ids: list[str] | None = None):
     # Fetch and process constituencies overview
     overview_data = sync_fetch_json(CONSTITUENCIES_OVERVIEW_URL)
     flat_data = (
         {**data, "constituency_id": constituency_id}
         for constituency_id, data in overview_data.items()
-        if constituency_id in ids
+        if (ids is None) or (constituency_id in ids)
     )
     overview_df = pl.DataFrame(flat_data)
 

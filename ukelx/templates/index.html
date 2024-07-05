@@ -26,19 +26,6 @@
             Loading constituencies...
         </div>
     </div>
-
-    <script type="text/hyperscript">
-        def filterConstituencies()
-            set query to #constituency-search.value.toLowerCase()
-            for constituency in #constituencies-list .constituency-card
-                set constituencyName to constituency.querySelector('h2').textContent.toLowerCase()
-                if constituencyName contains query
-                    remove .hidden from constituency
-                else
-                    add .hidden to constituency
-                end
-            end
-        end
-    </script>
+    {% include "components/filter_constituencies.html" %}
 </body>
 </html>
