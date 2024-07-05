@@ -4,14 +4,14 @@ from fastapi import FastAPI, HTTPException
 
 from .config import settings
 from .preprocessing import preprocess_data
-from .models import ConstituencyOverview, ConstituencyDetail
+from .models import ConstituencyDetail
 
 app = FastAPI()
 
 constituencies = preprocess_data()
 
 
-@app.get("/constituencies", response_model=list[ConstituencyOverview])
+@app.get("/constituencies", response_model=list[ConstituencyDetail])
 async def get_constituencies():
     return constituencies
 
