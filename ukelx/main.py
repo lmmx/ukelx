@@ -21,3 +21,13 @@ async def get_constituency(constituency_id: str):
         if constituency.constituency_id == constituency_id:
             return constituency
     raise HTTPException(status_code=404, detail="Constituency not found")
+
+
+def serve():
+    import uvicorn
+
+    uvicorn.run("ukelx.main:app", host="0.0.0.0", port=8000, reload=True)
+
+
+if __name__ == "__main__":
+    serve()
