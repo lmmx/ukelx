@@ -26,10 +26,15 @@
         
         <div class="mb-4">
             <span class="font-bold mr-2">Sort by:</span>
-            <button class="px-4 py-2 bg-gray-200 rounded mr-2" hx-get="/constituencies?sort=name" hx-target="#constituencies-list">Name</button>
-            <button class="px-4 py-2 bg-gray-200 rounded mr-2" hx-get="/constituencies?sort=majority" hx-target="#constituencies-list">Majority</button>
-            <button class="px-4 py-2 bg-gray-200 rounded mr-2" hx-get="/constituencies?sort=swing" hx-target="#constituencies-list">Swing</button>
-            <button class="px-4 py-2 bg-gray-200 rounded mr-2" hx-get="/constituencies?sort=runner_up_margin" hx-target="#constituencies-list">Runner-up Margin</button>
+	    {% set sort_options = {"name": "Name", "majority": "Majority", "swing": "Swing", "runner_up_margin": "Runner-up Margin"} %}
+	    {% for sort_value, sort_name in sort_options.items() %}
+                <button class="px-4 py-2 bg-gray-200 rounded mr-2 sort-button" 
+                        _="on click 
+                            remove .bg-blue-500 .text-white from .sort-button 
+                            add .bg-blue-500 .text-white to me"
+                        hx-get="/constituencies?sort={{ sort_value }}" 
+                        hx-target="#constituencies-list">{{ sort_name }}</button>
+            {% endfor %}
         </div>
         
         <div id="constituencies-list" 
