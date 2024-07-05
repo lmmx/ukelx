@@ -1,14 +1,22 @@
 from __future__ import annotations
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import HTMLResponse
 
 from .config import settings
+from .jinja import templates
 from .preprocessing import preprocess_data
 from .models import ConstituencyDetail
 
 app = FastAPI()
 
 constituencies = preprocess_data()
+
+
+@app.get("/", response_class=HTMLResponse)
+async def root(request: Request):
+    context = {"request": request, "settings": settings}
+    return templates.TemplateResponse("index.html", context)
 
 
 @app.get("/constituencies", response_model=list[ConstituencyDetail])

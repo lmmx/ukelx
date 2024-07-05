@@ -38,5 +38,5 @@ class ConstituencyOverview(ConstituencyBase):
     pass
 
 
-class ConstituencyDetail(CandidateResult):
+class ConstituencyDetail(ConstituencyBase, CandidateResult):
     pass
