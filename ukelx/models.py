@@ -12,8 +12,8 @@ class Status(str, Enum):
 class CandidateResult(BaseModel):
     party_code: str
     candidate: str
-    vote_number: int
-    vote_share: float
+    vote_number: int | None
+    vote_share: float | None
     is_previous_mp: bool
 
 
@@ -38,5 +38,5 @@ class ConstituencyOverview(ConstituencyBase):
     pass
 
 
-class ConstituencyDetail(ConstituencyBase):
-    candidates: list[CandidateResult]
+class ConstituencyDetail(CandidateResult):
+    pass

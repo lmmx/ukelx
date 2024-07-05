@@ -1,6 +1,7 @@
 import asyncio
 from itertools import chain
 
+from pydantic import TypeAdapter
 import httpx
 from httpx import RequestError, HTTPStatusError
 import polars as pl
@@ -16,7 +17,7 @@ async def fetch_constituency_detail_json(client, constituency_id, max_retries=3)
         try:
             response = await client.get(url, timeout=10.0)
             response.raise_for_status()
-            result = {"constituency_id": constituency_id, **response.json()}
+            result = [{"constituency_id": constituency_id, **info} for info in response.json()]
             return result
         except (RequestError, HTTPStatusError) as exc:
             print(f"Error fetching {url}: {exc}")
@@ -61,11 +62,12 @@ def preprocess_data():
     merged_df = overview_df.join(details_df, on="constituency_id", how="left")
 
     # Convert to Pydantic models
-    constituencies = [ConstituencyDetail(**row) for row in merged_df.to_dicts()]
+    const_candidate_ta = TypeAdapter(list[ConstituencyDetail])
+    constituencies = const_candidate_ta.validate_python(merged_df.to_dicts())
 
     return constituencies
 
 
-if __name__ == "__main__":
-    preprocessed_data = preprocess_data()
-    print(f"Preprocessed {len(preprocessed_data)} constituencies")
+# if __name__ == "__main__":
+#     preprocessed_data = preprocess_data()
+#     print(f"Preprocessed {len(preprocessed_data)} constituencies")
