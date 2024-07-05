@@ -1,4 +1,5 @@
 import asyncio
+from itertools import chain
 
 import httpx
 from httpx import RequestError, HTTPStatusError
@@ -8,13 +9,15 @@ from .config import CONSTITUENCIES_OVERVIEW_URL, CONSTITUENCY_DETAIL_URL_TEMPLAT
 from .models import ConstituencyDetail
 
 
-async def fetch_json(client, url, max_retries=3):
+async def fetch_constituency_detail_json(client, constituency_id, max_retries=3):
+    url = CONSTITUENCY_DETAIL_URL_TEMPLATE.format(constituency_id)
     print(f"Fetching {url}")
     for attempt in range(max_retries):
         try:
             response = await client.get(url, timeout=10.0)
             response.raise_for_status()
-            return response.json()
+            result = {"constituency_id": constituency_id, **response.json()}
+            return result
         except (RequestError, HTTPStatusError) as exc:
             print(f"Error fetching {url}: {exc}")
             if attempt < max_retries - 1:
@@ -28,7 +31,7 @@ async def fetch_json(client, url, max_retries=3):
 async def fetch_all_details(constituency_ids):
     async with httpx.AsyncClient() as client:
         tasks = [
-            fetch_json(client, CONSTITUENCY_DETAIL_URL_TEMPLATE.format(constituency_id))
+            fetch_constituency_detail_json(client, constituency_id)
             for constituency_id in constituency_ids
         ]
         return await asyncio.gather(*tasks)
@@ -52,8 +55,7 @@ def preprocess_data():
     # Fetch and process constituency details
     constituency_ids = overview_df["constituency_id"].to_list()
     details_data = asyncio.run(fetch_all_details(constituency_ids))
-    breakpoint()
-    details_df = pl.DataFrame(details_data)
+    details_df = pl.DataFrame(chain.from_iterable(details_data))
 
     # Merge overview and details data
     merged_df = overview_df.join(details_df, on="constituency_id", how="left")
