@@ -11,7 +11,7 @@ def datetime_filter(timestamp):
     from datetime import datetime
     if timestamp is None:
         return "Not available"
-    return datetime.fromtimestamp(timestamp / 1000).strftime('%Y-%m-%d %H:%M:%S')
+    return datetime.fromtimestamp(timestamp / 1000).strftime('%I:%M%p').lstrip('0').lower()
 
 # Add the custom filter to the Jinja2 environment
 templates.env.filters['datetime'] = datetime_filter
