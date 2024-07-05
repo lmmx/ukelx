@@ -2,11 +2,39 @@
     {% for constituency_id, results in constituencies.items() %}
     <div class="constituency-card bg-white shadow rounded-lg p-4">
         <h2 class="text-xl font-semibold mb-2">{{ results[0].name }}</h2>
+        <div class="mb-4">
+            <p><strong>Region:</strong> {{ results[0].region }}</p>
+            <p><strong>Country:</strong> {{ results[0].country }}</p>
+            <p><strong>2019 Result:</strong> {{ results[0].result_2019 }}</p>
+            <p><strong>2019 Majority:</strong> {{ "%.2f"|format(results[0].majority_2019_percent) }}%</p>
+            <p><strong>2024 Result:</strong> {{ results[0].result_2024 or 'Not declared' }}</p>
+            <p><strong>2024 Majority:</strong> 
+                {% if results[0].majority_2024_number is not none and results[0].majority_2024_percent is not none %}
+                    {{ "{:,}".format(results[0].majority_2024_number) }} ({{ "%.2f"|format(results[0].majority_2024_percent) }}%)
+                {% else %}
+                    👀 (🤔%)
+                {% endif %}
+            </p>
+            <p><strong>2024 Turnout:</strong> 
+                {% if results[0].turnout_2024_number is not none and results[0].turnout_2024_percent is not none %}
+                    {{ "{:,}".format(results[0].turnout_2024_number) }} ({{ "%.2f"|format(results[0].turnout_2024_percent) }}%)
+                {% else %}
+		    👀 (🤔%)
+                {% endif %}
+            </p>
+            {% if results[0].time_reported %}
+                <p><strong>Time Reported:</strong> {{ results[0].time_reported|datetime }}</p>
+            {% endif %}
+            {% if results[0].time_declared %}
+                <p><strong>Time Declared:</strong> {{ results[0].time_declared|datetime }}</p>
+            {% endif %}
+        </div>
         <table class="w-full text-sm">
             <tr>
                 <th class="text-left">Candidate</th>
                 <th class="text-left">Party</th>
                 <th class="text-right">Votes</th>
+                <th class="text-right">Previous MP</th>
             </tr>
             {% for result in results %}
             <tr class="{{ 'font-bold' if result.result_2024 == result.party_code else '' }}">
@@ -38,29 +66,15 @@
                     {% if result.vote_number is not none and result.vote_share is not none %}
                         {{ "{:,}".format(result.vote_number) }} ({{ "%.2f"|format(result.vote_share) }}%)
                     {% else %}
-                        👀 (🤔%)
+                        Not available
                     {% endif %}
+                </td>
+                <td class="text-right py-1">
+                    {{ "Yes" if result.is_previous_mp else "No" }}
                 </td>
             </tr>
             {% endfor %}
         </table>
-        <div class="mt-2 text-sm">
-            <p><strong>Result:</strong> {{ results[0].result_2024 or '¯\_(ツ)_/¯' }}</p>
-            <p><strong>Majority:</strong> 
-                {% if results[0].majority_2024_number is not none and results[0].majority_2024_percent is not none %}
-                    {{ "{:,}".format(results[0].majority_2024_number) }} ({{ "%.2f"|format(results[0].majority_2024_percent) }}%)
-                {% else %}
-                    👀 (🤔%)
-                {% endif %}
-            </p>
-            <p><strong>Turnout:</strong> 
-                {% if results[0].turnout_2024_number is not none and results[0].turnout_2024_percent is not none %}
-                    {{ "{:,}".format(results[0].turnout_2024_number) }} ({{ "%.2f"|format(results[0].turnout_2024_percent) }}%)
-                {% else %}
-                    👀 (🤔%)
-                {% endif %}
-            </p>
-        </div>
     </div>
     {% endfor %}
 </div>
