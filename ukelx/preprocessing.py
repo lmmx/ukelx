@@ -17,7 +17,9 @@ async def fetch_constituency_detail_json(client, constituency_id, max_retries=3)
         try:
             response = await client.get(url, timeout=10.0)
             response.raise_for_status()
-            result = [{"constituency_id": constituency_id, **info} for info in response.json()]
+            result = [
+                {"constituency_id": constituency_id, **info} for info in response.json()
+            ]
             return result
         except (RequestError, HTTPStatusError) as exc:
             print(f"Error fetching {url}: {exc}")

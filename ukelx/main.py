@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from fastapi import FastAPI, HTTPException
 
+from .config import settings
 from .preprocessing import preprocess_data
 from .models import ConstituencyOverview, ConstituencyDetail
 
@@ -26,7 +27,7 @@ async def get_constituency(constituency_id: str):
 def serve():
     import uvicorn
 
-    uvicorn.run("ukelx.main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("ukelx.main:app", host="0.0.0.0", port=8000, reload=settings.reload)
 
 
 if __name__ == "__main__":
