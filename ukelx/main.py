@@ -68,15 +68,37 @@ async def root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 @app.get("/constituencies", response_class=HTMLResponse)
-async def get_constituencies(request: Request, sort: str = Query(None, enum=["name", "majority", "swing", "runner_up_margin"])):
+async def get_constituencies(
+    request: Request, 
+    search: str = "", 
+    parties: str = "", 
+    regions: str = "", 
+    sort: str = Query("name", enum=["name", "majority", "swing", "runner_up_margin"])
+):
+    filtered_constituencies = constituencies
+
+    if search:
+        filtered_constituencies = [c for c in filtered_constituencies if search.lower() in c.name.lower()]
+    
+    if parties:
+        party_list = parties.split(',')
+        filtered_constituencies = [c for c in filtered_constituencies if c.result_2024 in party_list]
+    
+    if regions:
+        region_list = regions.split(',')
+        filtered_constituencies = [c for c in filtered_constituencies if c.region in region_list]
+
     grouped_constituencies = {}
-    for constituency in constituencies:
+    for constituency in filtered_constituencies:
         grouped_constituencies.setdefault(constituency.constituency_id, [])
         grouped_constituencies[constituency.constituency_id].append(constituency)
     
     sorted_constituencies = sort_constituencies(grouped_constituencies.values(), sort)
     
-    return templates.TemplateResponse("components/constituencies_list.html", {"request": request, "constituencies": {c[0].constituency_id: c for c in sorted_constituencies}})
+    return templates.TemplateResponse(
+        "components/constituencies_list.html", 
+        {"request": request, "constituencies": {c[0].constituency_id: c for c in sorted_constituencies}}
+    )
 
 @app.get("/constituencies_json", response_model=list[ConstituencyDetail])
 async def get_constituencies_json():

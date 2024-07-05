@@ -14,13 +14,13 @@
         
         <input type="text" id="constituency-search" placeholder="Search constituencies..." 
                class="w-full p-2 border rounded mb-4"
-               _="on keyup call filterConstituencies()">
+               _="on keyup call updateResults()">
         
         <div class="mb-4">
             <h2 class="text-xl font-semibold mb-2">Filter by Party:</h2>
             {% set parties = {"ALL": "All", "LAB": "Labour", "CON": "Conservative", "LD": "Lib Dem", "GRN": "Green", "SNP": "SNP", "REF": "Reform"} %}
             {% for party, party_name in parties.items() %}
-                <button class="px-4 py-2 bg-gray-200 rounded mr-2 mb-2" _="on click toggle .bg-blue-500 .text-white then call filterConstituencies()"
+                <button class="px-4 py-2 bg-gray-200 rounded mr-2 mb-2" _="on click toggle .bg-blue-500 .text-white then call updateResults()"
                         data-party="{{ party }}">{{ party_name }}</button>
             {% endfor %}
         </div>
@@ -29,7 +29,7 @@
             <h2 class="text-xl font-semibold mb-2">Filter by Region:</h2>
             {% set regions = ["All", "South East", "Greater London", "North West", "Scotland", "East of England", "Yorkshire and the Humber", "South West", "West Midlands", "East Midlands", "Wales", "North East", "Northern Ireland"] %}
             {% for region in regions %}
-                <button class="px-4 py-2 bg-gray-200 rounded mr-2 mb-2" _="on click toggle .bg-blue-500 .text-white then call filterConstituencies()"
+                <button class="px-4 py-2 bg-gray-200 rounded mr-2 mb-2" _="on click toggle .bg-blue-500 .text-white then call updateResults()"
                         data-region="{{ region }}">{{ region }}</button>
             {% endfor %}
         </div>
@@ -41,9 +41,9 @@
                 <button class="px-4 py-2 bg-gray-200 rounded mr-2 sort-button" 
                         _="on click 
                             remove .bg-blue-500 .text-white from .sort-button 
-                            add .bg-blue-500 .text-white to me"
-                        hx-get="/constituencies?sort={{ sort_value }}" 
-                        hx-target="#constituencies-list">{{ sort_name }}</button>
+                            add .bg-blue-500 .text-white to me
+                            call updateResults()"
+                        data-sort="{{ sort_value }}">{{ sort_name }}</button>
             {% endfor %}
         </div>
         

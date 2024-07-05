@@ -1,32 +1,60 @@
 <script type="text/hyperscript">
+    def getSelectedValues(selector)
+        set elements to document.querySelectorAll(selector + '.bg-blue-500')
+	console.log(elements)
+        set values to []
+        for el in elements
+            set attr to selector.substring(7, selector.length - 1)
+	    console.log('attr:', attr)
+            set value to el.getAttribute(attr)
+            if value != 'All'
+                values.push(value)
+            end
+        end
+	console.log('Selected: ', values)
+        return values
+    end
+
+    def updateResults()
+        set query to #constituency-search.value
+        set selectedParties to getSelectedValues('button[data-party]')
+        set selectedRegions to getSelectedValues('button[data-region]')
+        set sortButton to document.querySelector('.sort-button.bg-blue-500')
+        if sortButton
+	    set sortBy to sortButton.getAttribute('data-sort')
+	else
+	    set sortBy to 'name'
+	end
+
+        set url to `/constituencies?search=${query}&parties=${selectedParties.join(',')}&regions=${selectedRegions.join(',')}&sort=${sortBy}`
+        
+	console.log('url:', url)
+	fetch `${url}`
+            put the result into #constituencies-list.innerHTML
+    end
+
     def filterConstituencies()
         set query to #constituency-search.value.toLowerCase()
-        set selectedParties to []
-        set selectedRegions to []
-        
-        for button in document.querySelectorAll('button[data-party]')
-            if button.classList.contains('bg-blue-500')
-                selectedParties.push(button.getAttribute('data-party'))
-            end
-        end
-        
-        for button in document.querySelectorAll('button[data-region]')
-            if button.classList.contains('bg-blue-500')
-                selectedRegions.push(button.getAttribute('data-region'))
-            end
-        end
+        set selectedParties to getSelectedValues('button[data-party]')
+        set selectedRegions to getSelectedValues('button[data-region]')
         
         for constituency in #constituencies-list.querySelectorAll('.constituency-card')
             set constituencyName to constituency.querySelector('h2').textContent.toLowerCase()
             set constituencyRegion to constituency.getAttribute('data-region')
-            set showConstituency to false
+            set constituencyPartyElement to constituency.querySelector('[data-party]')
+            if constituencyPartyElement
+	        set constituencyParty to constituencyPartyElement.getAttribute('data-party')
+	    else
+	        set constituencyParty to ''
             
-            if constituencyName contains query
-                if (selectedParties.length is 0 or selectedParties.includes('ALL') or constituency.querySelector(`[data-party="${selectedParties.join(',')}"]`))
-                    if (selectedRegions.length is 0 or selectedRegions.includes('All') or selectedRegions.includes(constituencyRegion))
-                        set showConstituency to true
-                    end
-                end
+            set showConstituency to constituencyName contains query
+            
+            if showConstituency and selectedParties.length > 0
+                set showConstituency to selectedParties.includes(constituencyParty)
+            end
+            
+            if showConstituency and selectedRegions.length > 0
+                set showConstituency to selectedRegions.includes(constituencyRegion)
             end
             
             if showConstituency
