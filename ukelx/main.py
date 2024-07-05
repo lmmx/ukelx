@@ -3,7 +3,7 @@ import json
 import polars as pl
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, Query
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -51,17 +51,32 @@ def group_constituencies(constituencies):
         })
     return grouped
 
+def sort_constituencies(constituencies, sort_by):
+    if sort_by == "name":
+        return sorted(constituencies, key=lambda x: x[0].name)
+    elif sort_by == "majority":
+        return sorted(constituencies, key=lambda x: x[0].majority_2024_percent or 0, reverse=True)
+    elif sort_by == "swing":
+        return sorted(constituencies, key=lambda x: abs((x[0].majority_2024_percent or 0) - (x[0].majority_2019_percent or 0)), reverse=True)
+    elif sort_by == "runner_up_margin":
+        return sorted(constituencies, key=lambda x: (x[0].vote_number or 0) - (x[1].vote_number or 0) if len(x) > 1 else float('inf'))
+    else:
+        return constituencies
+
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 @app.get("/constituencies", response_class=HTMLResponse)
-async def get_constituencies(request: Request):
+async def get_constituencies(request: Request, sort: str = Query(None, enum=["name", "majority", "swing", "runner_up_margin"])):
     grouped_constituencies = {}
     for constituency in constituencies:
         grouped_constituencies.setdefault(constituency.constituency_id, [])
         grouped_constituencies[constituency.constituency_id].append(constituency)
-    return templates.TemplateResponse("components/constituencies_list.html", {"request": request, "constituencies": grouped_constituencies})
+    
+    sorted_constituencies = sort_constituencies(grouped_constituencies.values(), sort)
+    
+    return templates.TemplateResponse("components/constituencies_list.html", {"request": request, "constituencies": {c[0].constituency_id: c for c in sorted_constituencies}})
 
 @app.get("/constituencies_json", response_model=list[ConstituencyDetail])
 async def get_constituencies_json():

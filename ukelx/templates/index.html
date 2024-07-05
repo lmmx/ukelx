@@ -21,7 +21,15 @@
         {% for party, party_name in parties.items() %}
             <button class="px-4 py-2 bg-gray-200 rounded mr-2" _="on click toggle .bg-blue-500 .text-white then call filterByParty()"
                     data-party="{{ party }}">{{ party_name }}</button>
-            {% endfor %}
+        {% endfor %}
+        </div>
+        
+        <div class="mb-4">
+            <span class="font-bold mr-2">Sort by:</span>
+            <button class="px-4 py-2 bg-gray-200 rounded mr-2" hx-get="/constituencies?sort=name" hx-target="#constituencies-list">Name</button>
+            <button class="px-4 py-2 bg-gray-200 rounded mr-2" hx-get="/constituencies?sort=majority" hx-target="#constituencies-list">Majority</button>
+            <button class="px-4 py-2 bg-gray-200 rounded mr-2" hx-get="/constituencies?sort=swing" hx-target="#constituencies-list">Swing</button>
+            <button class="px-4 py-2 bg-gray-200 rounded mr-2" hx-get="/constituencies?sort=runner_up_margin" hx-target="#constituencies-list">Runner-up Margin</button>
         </div>
         
         <div id="constituencies-list" 
