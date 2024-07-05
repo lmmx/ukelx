@@ -45,7 +45,7 @@
             {% endfor %}
         </table>
         <div class="mt-2 text-sm">
-            <p><strong>Result:</strong> {{ results[0].result_2024 or 'None' }}</p>
+            <p><strong>Result:</strong> {{ results[0].result_2024 or '¯\_(ツ)_/¯' }}</p>
             <p><strong>Majority:</strong> 
                 {% if results[0].majority_2024_number is not none and results[0].majority_2024_percent is not none %}
                     {{ "{:,}".format(results[0].majority_2024_number) }} ({{ "%.2f"|format(results[0].majority_2024_percent) }}%)
