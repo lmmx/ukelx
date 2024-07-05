@@ -1,7 +1,7 @@
 {% from "components/party_result_badge.html" import party_result_badge %}
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
     {% for constituency_id, results in constituencies.items() %}
-    <div class="constituency-card bg-white shadow rounded-lg p-4 relative">
+    <div class="constituency-card bg-white shadow rounded-lg p-4 relative" data-region="{{ results[0].region }}">
         <div class="float-left pr-2 right-2 text-2xl">
             {% if results[0].country == 'England' %}🏴󠁧󠁢󠁥󠁮󠁧󠁿
             {% elif results[0].country == 'Scotland' %}🏴󠁧󠁢󠁳󠁣󠁴󠁿
@@ -49,17 +49,17 @@
                 </td>
                 <td class="py-1">
                     {{ party_result_badge(result.party_code) }}
-		    {% if result.party_code == results[0].result_2019 %}
+                    {% if result.party_code == results[0].result_2019 %}
                       {% if loop.index == 1 %}
-  		      <span class="pl-1 text-xs">=</span>
-		      {% else %}
-  		      <span class="pl-1 text-xs">↓</span>
-  		      {% endif %}
-		    {% else %}
+                      <span class="pl-1 text-xs">=</span>
+                      {% else %}
+                      <span class="pl-1 text-xs">↓</span>
+                      {% endif %}
+                    {% else %}
                       {% if loop.index == 1 %}
-		      <span class="pl-1 text-xs">↑</span>
-		      {% endif %}
-		    {% endif %}
+                      <span class="pl-1 text-xs">↑</span>
+                      {% endif %}
+                    {% endif %}
                 </td>
                 <td class="text-right py-1">
                     {% if result.vote_number is not none and result.vote_share is not none %}

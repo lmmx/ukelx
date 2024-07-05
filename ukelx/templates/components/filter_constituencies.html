@@ -1,33 +1,30 @@
 <script type="text/hyperscript">
     def filterConstituencies()
         set query to #constituency-search.value.toLowerCase()
-        for constituency in #constituencies-list.querySelectorAll('.constituency-card')
-            set constituencyName to constituency.querySelector('h2').textContent.toLowerCase()
-            if constituencyName contains query
-                remove .hidden from constituency
-            else
-                add .hidden to constituency
-            end
-        end
-    end
-
-    def filterByParty()
         set selectedParties to []
+        set selectedRegions to []
+        
         for button in document.querySelectorAll('button[data-party]')
             if button.classList.contains('bg-blue-500')
                 selectedParties.push(button.getAttribute('data-party'))
             end
         end
         
+        for button in document.querySelectorAll('button[data-region]')
+            if button.classList.contains('bg-blue-500')
+                selectedRegions.push(button.getAttribute('data-region'))
+            end
+        end
+        
         for constituency in #constituencies-list.querySelectorAll('.constituency-card')
+            set constituencyName to constituency.querySelector('h2').textContent.toLowerCase()
+            set constituencyRegion to constituency.getAttribute('data-region')
             set showConstituency to false
-            if selectedParties.length is 0 or selectedParties.includes('ALL')
-                set showConstituency to true
-            else
-                for party in selectedParties
-                    if constituency.querySelector(`[data-party="${party}"]`)
+            
+            if constituencyName contains query
+                if (selectedParties.length is 0 or selectedParties.includes('ALL') or constituency.querySelector(`[data-party="${selectedParties.join(',')}"]`))
+                    if (selectedRegions.length is 0 or selectedRegions.includes('All') or selectedRegions.includes(constituencyRegion))
                         set showConstituency to true
-                        break
                     end
                 end
             end
