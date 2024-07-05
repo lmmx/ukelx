@@ -10,16 +10,56 @@
             </tr>
             {% for result in results %}
             <tr class="{{ 'font-bold' if result.result_2024 == result.party_code else '' }}">
-                <td>{{ result.candidate }}</td>
-                <td>{{ result.party_code }}</td>
-                <td class="text-right">{{ result.vote_number }} ({{ result.vote_share }}%)</td>
+                <td class="py-1">{{ result.candidate }}</td>
+                <td class="py-1">
+                    <span class="px-2 py-0.5 rounded text-xs font-bold
+                    {% if result.party_code == 'CON' %}
+                        bg-[#0099db] text-white
+                    {% elif result.party_code == 'LAB' %}
+                        bg-[#d60000] text-white
+                    {% elif result.party_code == 'LD' %}
+                        bg-[#faa61a] text-black
+                    {% elif result.party_code == 'SNP' %}
+                        bg-[#fff95d] text-black
+                    {% elif result.party_code == 'GRN' %}
+                        bg-[#33a22b] text-white
+                    {% elif result.party_code == 'REF' %}
+                        bg-[#12B6CF] text-white
+                    {% elif result.party_code == 'IND' %}
+                        bg-[#CCCCCC] text-black
+                    {% else %}
+                        bg-[#929292] text-white
+                    {% endif %}
+                    ">
+                        {{ result.party_code }}
+                    </span>
+                </td>
+                <td class="text-right py-1">
+                    {% if result.vote_number is not none and result.vote_share is not none %}
+                        {{ "{:,}".format(result.vote_number) }} ({{ "%.2f"|format(result.vote_share) }}%)
+                    {% else %}
+                        👀 (🤔%)
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
         </table>
-        <div class="mt-2">
-            <p><strong>Result:</strong> {{ results[0].result_2024 }}</p>
-            <p><strong>Majority:</strong> {{ results[0].majority_2024_number }} ({{ results[0].majority_2024_percent }}%)</p>
-            <p><strong>Turnout:</strong> {{ results[0].turnout_2024_number }} ({{ results[0].turnout_2024_percent }}%)</p>
+        <div class="mt-2 text-sm">
+            <p><strong>Result:</strong> {{ results[0].result_2024 or 'None' }}</p>
+            <p><strong>Majority:</strong> 
+                {% if results[0].majority_2024_number is not none and results[0].majority_2024_percent is not none %}
+                    {{ "{:,}".format(results[0].majority_2024_number) }} ({{ "%.2f"|format(results[0].majority_2024_percent) }}%)
+                {% else %}
+                    👀 (🤔%)
+                {% endif %}
+            </p>
+            <p><strong>Turnout:</strong> 
+                {% if results[0].turnout_2024_number is not none and results[0].turnout_2024_percent is not none %}
+                    {{ "{:,}".format(results[0].turnout_2024_number) }} ({{ "%.2f"|format(results[0].turnout_2024_percent) }}%)
+                {% else %}
+                    👀 (🤔%)
+                {% endif %}
+            </p>
         </div>
     </div>
     {% endfor %}
