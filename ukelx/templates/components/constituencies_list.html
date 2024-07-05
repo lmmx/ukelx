@@ -1,33 +1,26 @@
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
     {% for constituency in constituencies %}
-    <div class="bg-white shadow rounded-lg p-4">
+    <div class="constituency-card bg-white shadow rounded-lg p-4">
         <h2 class="text-xl font-semibold mb-2">{{ constituency.name }}</h2>
         <table class="w-full text-sm">
             <tr>
-                <td class="font-semibold">Candidate:</td>
-                <td>{{ constituency.candidate }}</td>
+                <th class="text-left">Candidate</th>
+                <th class="text-left">Party</th>
+                <th class="text-right">Votes</th>
             </tr>
-            <tr>
-                <td class="font-semibold">Party:</td>
-                <td>{{ constituency.party_code }}</td>
+            {% for result in constituency.results %}
+            <tr class="{{ 'font-bold' if result.result_2024 == 'WIN' else '' }}">
+                <td>{{ result.candidate }}</td>
+                <td>{{ result.party_code }}</td>
+                <td class="text-right">{{ result.vote_number }} ({{ result.vote_share }}%)</td>
             </tr>
-            <tr>
-                <td class="font-semibold">Votes:</td>
-                <td>{{ constituency.vote_number }} ({{ constituency.vote_share }}%)</td>
-            </tr>
-            <tr>
-                <td class="font-semibold">Result:</td>
-                <td>{{ constituency.result_2024 }}</td>
-            </tr>
-            <tr>
-                <td class="font-semibold">Majority:</td>
-                <td>{{ constituency.majority_2024_number }} ({{ constituency.majority_2024_percent }}%)</td>
-            </tr>
-            <tr>
-                <td class="font-semibold">Turnout:</td>
-                <td>{{ constituency.turnout_2024_number }} ({{ constituency.turnout_2024_percent }}%)</td>
-            </tr>
+            {% endfor %}
         </table>
+        <div class="mt-2">
+            <p><strong>Result:</strong> {{ constituency.results[0].result_2024 }}</p>
+            <p><strong>Majority:</strong> {{ constituency.results[0].majority_2024_number }} ({{ constituency.results[0].majority_2024_percent }}%)</p>
+            <p><strong>Turnout:</strong> {{ constituency.results[0].turnout_2024_number }} ({{ constituency.results[0].turnout_2024_percent }}%)</p>
+        </div>
     </div>
     {% endfor %}
 </div>
