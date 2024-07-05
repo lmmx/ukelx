@@ -1,0 +1,23 @@
+{% macro party_result_badge(party_code) %}
+<span class="px-2 py-0.5 rounded text-xs font-bold
+{% if party_code == 'CON' %}
+    bg-[#0099db] text-white
+{% elif party_code == 'LAB' %}
+    bg-[#d60000] text-white
+{% elif party_code == 'LD' %}
+    bg-[#faa61a] text-black
+{% elif party_code == 'SNP' %}
+    bg-[#fff95d] text-black
+{% elif party_code == 'GRN' %}
+    bg-[#33a22b] text-white
+{% elif party_code == 'REF' %}
+    bg-[#12B6CF] text-white
+{% elif party_code == 'IND' %}
+    bg-[#CCCCCC] text-black
+{% else %}
+    bg-[#929292] text-white
+{% endif %}
+">
+    {{ party_code }}
+</span>
+{% endmacro %}

@@ -1,13 +1,26 @@
 from __future__ import annotations
 from enum import Enum
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, field_validator
 
 
 class Status(str, Enum):
     RESULT = "result"
     UNDECLARED = "undeclared"
 
+class Region(str, Enum):
+    SE = "South East"
+    GL = "Greater London"
+    NW = "North West"
+    SC = "Scotland"
+    EE = "East of England"
+    YH = "Yorkshire and the Humber"
+    SW = "South West"
+    WM = "West Midlands"
+    EM = "East Midlands"
+    WA = "Wales"
+    NE = "North East"
+    NI = "Northern Ireland"
 
 class CandidateResult(BaseModel):
     party_code: str
@@ -18,6 +31,7 @@ class CandidateResult(BaseModel):
 
 
 class ConstituencyBase(BaseModel):
+    model_config = ConfigDict(use_enum_values=True)
     constituency_id: str
     name: str
     region: str
@@ -33,6 +47,10 @@ class ConstituencyBase(BaseModel):
     turnout_2024_number: int | None
     turnout_2024_percent: float | None
 
+    @field_validator("region")
+    @classmethod
+    def full_region_name(cls, v: str) -> str:
+        return Region[v].value
 
 class ConstituencyOverview(ConstituencyBase):
     pass
