@@ -16,6 +16,14 @@
                class="w-full p-2 border rounded mb-4"
                _="on keyup call filterConstituencies()">
         
+        <div class="mb-4">
+        {% set parties = {"ALL": "All", "LAB": "Labour", "CON": "Conservative", "LD": "Lib Dem", "GRN": "Green", "SNP": "SNP", "REF": "Reform"} %}
+        {% for party, party_name in parties.items() %}
+            <button class="px-4 py-2 bg-gray-200 rounded mr-2" _="on click toggle .bg-blue-500 .text-white then call filterByParty()"
+                    data-party="{{ party }}">{{ party_name }}</button>
+            {% endfor %}
+        </div>
+        
         <div id="constituencies-list" 
              hx-get="/constituencies" 
              hx-trigger="load"

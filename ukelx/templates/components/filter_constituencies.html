@@ -10,4 +10,33 @@
             end
         end
     end
+
+    def filterByParty()
+        set selectedParties to []
+        for button in document.querySelectorAll('button[data-party]')
+            if button.classList.contains('bg-blue-500')
+                selectedParties.push(button.getAttribute('data-party'))
+            end
+        end
+        
+        for constituency in #constituencies-list.querySelectorAll('.constituency-card')
+            set showConstituency to false
+            if selectedParties.length is 0 or selectedParties.includes('ALL')
+                set showConstituency to true
+            else
+                for party in selectedParties
+                    if constituency.querySelector(`[data-party="${party}"]`)
+                        set showConstituency to true
+                        break
+                    end
+                end
+            end
+            
+            if showConstituency
+                remove .hidden from constituency
+            else
+                add .hidden to constituency
+            end
+        end
+    end
 </script>

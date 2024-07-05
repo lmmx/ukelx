@@ -38,13 +38,28 @@
                 <th class="text-left">Candidate</th>
                 <th class="text-left">Party</th>
                 <th class="text-right">Votes</th>
-                <th class="text-right">Previous MP</th>
             </tr>
             {% for result in results %}
-            <tr class="{{ 'font-bold' if result.result_2024 == result.party_code else '' }}">
-                <td class="py-1">{{ result.candidate }}</td>
+            <tr class="{{ 'bg-yellow-100' if loop.first else '' }}" data-party="{{ result.party_code }}">
+                <td class="py-1">
+                    {% if loop.index == 1 %}🥇{% endif %}
+                    {% if loop.index == 2 %}🥈{% endif %}
+                    {% if loop.index == 3 %}🥉{% endif %}
+                    {{ result.candidate }}
+                </td>
                 <td class="py-1">
                     {{ party_result_badge(result.party_code) }}
+		    {% if result.party_code == results[0].result_2019 %}
+                      {% if loop.index == 1 %}
+  		      <span class="pl-1 text-xs">=</span>
+		      {% else %}
+  		      <span class="pl-1 text-xs">↓</span>
+  		      {% endif %}
+		    {% else %}
+                      {% if loop.index == 1 %}
+		      <span class="pl-1 text-xs">↑</span>
+		      {% endif %}
+		    {% endif %}
                 </td>
                 <td class="text-right py-1">
                     {% if result.vote_number is not none and result.vote_share is not none %}
@@ -52,9 +67,6 @@
                     {% else %}
                         Not available
                     {% endif %}
-                </td>
-                <td class="text-right py-1">
-                    {{ "Yes" if result.is_previous_mp else "No" }}
                 </td>
             </tr>
             {% endfor %}
