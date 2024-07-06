@@ -1,3 +1,4 @@
+{% from "components/party_result_badge.html" import party_result_badge %}
 <div id="constituencies-summary" class="mb-4 p-4 bg-gray-100 rounded-lg shadow">
     <h2 class="text-xl font-bold mb-2">Summary</h2>
     <table class="w-full">
@@ -9,11 +10,21 @@
             </tr>
         </thead>
         <tbody>
+            {% set total_seats = summary.values() | sum(attribute='seats') %}
             {% for party, data in summary.items() %}
             <tr>
-                <td>{{ party }}</td>
-                <td class="text-right">{{ data['seats'] }}</td>
-                <td class="text-right">{{ "%.1f"|format(data['vote_share']) }}%</td>
+                <td class="py-1">
+                    {{ party_result_badge(party) }}
+                </td>
+                <td class="text-right py-1 relative">
+                    <div class="absolute top-0 left-0 h-full" style="
+                        width: {{ (data['seats'] / total_seats * 100) if total_seats > 0 else 0 }}%;
+                        background-color: {{ party_colors.get(party, '#929292') }};
+                        opacity: 0.9;
+                    "></div>
+                    <span class="relative z-10">{{ data['seats'] }}</span>
+                </td>
+                <td class="text-right py-1">{{ "%.1f"|format(data['vote_share']) }}%</td>
             </tr>
             {% endfor %}
         </tbody>
