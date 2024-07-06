@@ -18,10 +18,31 @@
         
         <div class="mb-4">
             <h2 class="text-xl font-semibold mb-2">Filter by Party:</h2>
-            {% set parties = {"ALL": "All", "LAB": "Labour", "CON": "Conservative", "LD": "Lib Dem", "GRN": "Green", "SNP": "SNP", "REF": "Reform"} %}
-            {% for party, party_name in parties.items() %}
-                <button class="px-4 py-2 bg-gray-200 rounded mr-2 mb-2" _="on click toggle .bg-blue-500 .text-white then call updateResults()"
-                        data-party="{{ party }}">{{ party_name }}</button>
+            <button class="px-4 py-2 bg-gray-200 rounded mr-2 mb-2" _="on click toggle .bg-blue-500 .text-white then call updateResults()"
+                    data-party="">All Parties</button>
+            {% set party_names = {
+                'LAB': 'Labour',
+                'CON': 'Conservative',
+                'LD': 'Liberal Democrats',
+                'GRN': 'Green',
+                'SNP': 'Scottish National Party',
+                'REF': 'Reform UK',
+                'IND': 'Independent',
+                'SF': 'Sinn Féin',
+                'DUP': 'Democratic Unionist Party',
+                'PC': 'Plaid Cymru',
+                'SDLP': 'Social Democratic and Labour Party',
+                'APNI': 'Alliance Party',
+                'UUP': 'Ulster Unionist Party',
+                'SPK': 'Speaker',
+                'UKIP': 'UK Independence Party'
+            } %}
+            {% for party_code, party_name in party_names.items() %}
+                <button class="px-4 py-2 bg-gray-200 rounded mr-2 mb-2" 
+                        _="on click toggle .bg-blue-500 .text-white then call updateResults()"
+                        data-party="{{ party_code }}">
+                    {{ party_name }}
+                </button>
             {% endfor %}
         </div>
 

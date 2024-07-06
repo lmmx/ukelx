@@ -1,17 +1,17 @@
 <script type="text/hyperscript">
     def getSelectedValues(selector)
         set elements to document.querySelectorAll(selector + '.bg-blue-500')
-	console.log(elements)
+        console.log(elements)
         set values to []
         for el in elements
             set attr to selector.substring(7, selector.length - 1)
-	    console.log('attr:', attr)
+            console.log('attr:', attr)
             set value to el.getAttribute(attr)
-            if value != 'All'
+            if value != '' and value != 'All'
                 values.push(value)
             end
         end
-	console.log('Selected: ', values)
+        console.log('Selected: ', values)
         return values
     end
 
@@ -21,15 +21,15 @@
         set selectedRegions to getSelectedValues('button[data-region]')
         set sortButton to document.querySelector('.sort-button.bg-blue-500')
         if sortButton
-	    set sortBy to sortButton.getAttribute('data-sort')
-	else
-	    set sortBy to 'name'
-	end
+            set sortBy to sortButton.getAttribute('data-sort')
+        else
+            set sortBy to 'name'
+        end
 
         set url to `/constituencies?search=${query}&parties=${selectedParties.join(',')}&regions=${selectedRegions.join(',')}&sort=${sortBy}`
         
-	console.log('url:', url)
-	fetch `${url}`
+        console.log('url:', url)
+        fetch `${url}`
             put the result into #constituencies-list.innerHTML
     end
 
@@ -43,9 +43,9 @@
             set constituencyRegion to constituency.getAttribute('data-region')
             set constituencyPartyElement to constituency.querySelector('[data-party]')
             if constituencyPartyElement
-	        set constituencyParty to constituencyPartyElement.getAttribute('data-party')
-	    else
-	        set constituencyParty to ''
+                set constituencyParty to constituencyPartyElement.getAttribute('data-party')
+            else
+                set constituencyParty to ''
             
             set showConstituency to constituencyName contains query
             
