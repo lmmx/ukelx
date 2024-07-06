@@ -7,6 +7,7 @@ from fastapi import FastAPI, HTTPException, Request, Query
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from pydantic import TypeAdapter
 from itertools import groupby
 from operator import attrgetter
 
@@ -26,7 +27,8 @@ try:
     with open(static_dir / "cached_constituencies.json") as f:
         cached_constituencies = json.load(f)
     # Convert cached data to ConstituencyDetail objects
-    cached_constituencies = [ConstituencyDetail(**constituency) for constituency in cached_constituencies]
+    const_ta = TypeAdapter(list[ConstituencyDetail])
+    cached_constituencies = const_ta.validate_python(cached_constituencies)
 except:
     cached_constituencies = []
 

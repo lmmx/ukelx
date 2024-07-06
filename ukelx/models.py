@@ -50,7 +50,10 @@ class ConstituencyBase(BaseModel):
     @field_validator("region")
     @classmethod
     def full_region_name(cls, v: str) -> str:
-        return Region[v].value
+        try:
+            return Region[v].value
+        except:
+            return v
 
 class ConstituencyOverview(ConstituencyBase):
     pass
