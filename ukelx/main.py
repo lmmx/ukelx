@@ -50,8 +50,19 @@ party_colors = {
     'GRN': '#33a22b',
     'SNP': '#fff95d',
     'REF': '#12B6CF',
-    'IND': '#CCCCCC'
+    'IND': '#CCCCCC',
+    'SF': '#005717',
+    'DUP': '#D46A4C',
+    'PC': '#008142',
+    'SDLP': '#69C1BD',
+    'OTH': '#929292',
+    'APNI': '#F6CB2F',
+    'UUP': '#48A5EE',
+    'SPK': '#7D827E',
+    'UKIP': '#70147A'
 }
+
+templates.env.globals['party_colors'] = party_colors
 
 def group_constituencies(constituencies):
     sorted_constituencies = sorted(constituencies, key=attrgetter('name'))
