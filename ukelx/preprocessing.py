@@ -55,6 +55,9 @@ def preprocess_data(ids: list[str] | None = None):
         if (ids is None) or (constituency_id in ids)
     )
     overview_df = pl.DataFrame(flat_data)
+    if overview_df.is_empty():
+        # All seats declared
+        return []
 
     # Fetch and process constituency details
     constituency_ids = overview_df["constituency_id"].to_list()

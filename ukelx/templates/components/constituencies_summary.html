@@ -1,0 +1,21 @@
+<div id="constituencies-summary" class="mb-4 p-4 bg-gray-100 rounded-lg shadow">
+    <h2 class="text-xl font-bold mb-2">Summary</h2>
+    <table class="w-full">
+        <thead>
+            <tr>
+                <th class="text-left">Party</th>
+                <th class="text-right">Seats</th>
+                <th class="text-right">Vote Share</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for party, data in summary.items() %}
+            <tr>
+                <td>{{ party }}</td>
+                <td class="text-right">{{ data['seats'] }}</td>
+                <td class="text-right">{{ "%.1f"|format(data['vote_share']) }}%</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -1,4 +1,5 @@
 {% from "components/party_result_badge.html" import party_result_badge %}
+{% include "components/constituencies_summary.html" %}
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
     {% for constituency_id, results in constituencies.items() %}
     <div class="constituency-card bg-white shadow rounded-lg p-4 relative" data-region="{{ results[0].region }}">
