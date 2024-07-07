@@ -17,7 +17,9 @@
 
     def updateResults()
         set query to #constituency-search.value
-        set selectedParties to getSelectedValues('button[data-party]')
+        set selectedParties1st to getSelectedValues('button[data-party-1st]')
+        set selectedParties2nd to getSelectedValues('button[data-party-2nd]')
+        set selectedParties3rd to getSelectedValues('button[data-party-3rd]')
         set selectedRegions to getSelectedValues('button[data-region]')
         set sortButton to document.querySelector('.sort-button.bg-blue-500')
         if sortButton
@@ -27,7 +29,7 @@
         end
         set showTop3 to #toggle-candidates.classList.contains('bg-blue-500')
 
-        set url to `/constituencies?search=${query}&parties=${selectedParties.join(',')}&regions=${selectedRegions.join(',')}&sort=${sortBy}&top3=${showTop3}`
+        set url to `/constituencies?search=${query}&parties_1st=${selectedParties1st.join(',')}&parties_2nd=${selectedParties2nd.join(',')}&parties_3rd=${selectedParties3rd.join(',')}&regions=${selectedRegions.join(',')}&sort=${sortBy}&top3=${showTop3}`
         
         console.log('url:', url)
         fetch `${url}`
@@ -36,23 +38,29 @@
 
     def filterConstituencies()
         set query to #constituency-search.value.toLowerCase()
-        set selectedParties to getSelectedValues('button[data-party]')
+        set selectedParties1st to getSelectedValues('button[data-party-1st]')
+        set selectedParties2nd to getSelectedValues('button[data-party-2nd]')
+        set selectedParties3rd to getSelectedValues('button[data-party-3rd]')
         set selectedRegions to getSelectedValues('button[data-region]')
         set showTop3 to #toggle-candidates.classList.contains('bg-blue-500')
         
         for constituency in #constituencies-list.querySelectorAll('.constituency-card')
             set constituencyName to constituency.querySelector('h2').textContent.toLowerCase()
             set constituencyRegion to constituency.getAttribute('data-region')
-            set constituencyPartyElement to constituency.querySelector('[data-party]')
-            if constituencyPartyElement
-                set constituencyParty to constituencyPartyElement.getAttribute('data-party')
-            else
-                set constituencyParty to ''
+            set constituencyPartyElements to constituency.querySelectorAll('[data-party]')
             
             set showConstituency to constituencyName contains query
             
-            if showConstituency and selectedParties.length > 0
-                set showConstituency to selectedParties.includes(constituencyParty)
+            if showConstituency and selectedParties1st.length > 0
+                set showConstituency to selectedParties1st.includes(constituencyPartyElements[0].getAttribute('data-party'))
+            end
+            
+            if showConstituency and selectedParties2nd.length > 0 and constituencyPartyElements.length > 1
+                set showConstituency to selectedParties2nd.includes(constituencyPartyElements[1].getAttribute('data-party'))
+            end
+            
+            if showConstituency and selectedParties3rd.length > 0 and constituencyPartyElements.length > 2
+                set showConstituency to selectedParties3rd.includes(constituencyPartyElements[2].getAttribute('data-party'))
             end
             
             if showConstituency and selectedRegions.length > 0

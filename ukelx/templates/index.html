@@ -18,8 +18,6 @@
         
         <div class="mb-4">
             <h2 class="text-xl font-semibold mb-2">Filter by Party:</h2>
-            <button class="px-4 py-2 bg-gray-200 rounded mr-2 mb-2" _="on click toggle .bg-blue-500 .text-white then call updateResults()"
-                    data-party="">All Parties</button>
             {% set party_names = {
                 'LAB': 'Labour',
                 'CON': 'Conservative',
@@ -37,13 +35,42 @@
                 'SPK': 'Speaker',
                 'UKIP': 'UK Independence Party'
             } %}
-            {% for party_code, party_name in party_names.items() %}
-                <button class="px-4 py-2 bg-gray-200 rounded mr-2 mb-2" 
-                        _="on click toggle .bg-blue-500 .text-white then call updateResults()"
-                        data-party="{{ party_code }}">
-                    {{ party_name }}
-                </button>
-            {% endfor %}
+            <div class="mb-2">
+                <span class="font-bold mr-2">1st Place:</span>
+                <button class="px-4 py-2 bg-gray-200 rounded mr-2 mb-2" _="on click toggle .bg-blue-500 .text-white then call updateResults()"
+                        data-party-1st="">All Parties</button>
+                {% for party_code, party_name in party_names.items() %}
+                    <button class="px-4 py-2 bg-gray-200 rounded mr-2 mb-2" 
+                            _="on click toggle .bg-blue-500 .text-white then call updateResults()"
+                            data-party-1st="{{ party_code }}">
+                        {{ party_name }}
+                    </button>
+                {% endfor %}
+            </div>
+            <div class="mb-2">
+                <span class="font-bold mr-2">2nd Place:</span>
+                <button class="px-4 py-2 bg-gray-200 rounded mr-2 mb-2" _="on click toggle .bg-blue-500 .text-white then call updateResults()"
+                        data-party-2nd="">All Parties</button>
+                {% for party_code, party_name in party_names.items() %}
+                    <button class="px-4 py-2 bg-gray-200 rounded mr-2 mb-2" 
+                            _="on click toggle .bg-blue-500 .text-white then call updateResults()"
+                            data-party-2nd="{{ party_code }}">
+                        {{ party_name }}
+                    </button>
+                {% endfor %}
+            </div>
+            <div class="mb-2">
+                <span class="font-bold mr-2">3rd Place:</span>
+                <button class="px-4 py-2 bg-gray-200 rounded mr-2 mb-2" _="on click toggle .bg-blue-500 .text-white then call updateResults()"
+                        data-party-3rd="">All Parties</button>
+                {% for party_code, party_name in party_names.items() %}
+                    <button class="px-4 py-2 bg-gray-200 rounded mr-2 mb-2" 
+                            _="on click toggle .bg-blue-500 .text-white then call updateResults()"
+                            data-party-3rd="{{ party_code }}">
+                        {{ party_name }}
+                    </button>
+                {% endfor %}
+            </div>
         </div>
 
         <div class="mb-4">
