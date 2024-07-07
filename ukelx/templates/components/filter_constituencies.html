@@ -25,8 +25,9 @@
         else
             set sortBy to 'name'
         end
+        set showTop3 to #toggle-candidates.classList.contains('bg-blue-500')
 
-        set url to `/constituencies?search=${query}&parties=${selectedParties.join(',')}&regions=${selectedRegions.join(',')}&sort=${sortBy}`
+        set url to `/constituencies?search=${query}&parties=${selectedParties.join(',')}&regions=${selectedRegions.join(',')}&sort=${sortBy}&top3=${showTop3}`
         
         console.log('url:', url)
         fetch `${url}`
@@ -37,6 +38,7 @@
         set query to #constituency-search.value.toLowerCase()
         set selectedParties to getSelectedValues('button[data-party]')
         set selectedRegions to getSelectedValues('button[data-region]')
+        set showTop3 to #toggle-candidates.classList.contains('bg-blue-500')
         
         for constituency in #constituencies-list.querySelectorAll('.constituency-card')
             set constituencyName to constituency.querySelector('h2').textContent.toLowerCase()
@@ -59,9 +61,30 @@
             
             if showConstituency
                 remove .hidden from constituency
+                if showTop3
+                    for row in constituency.querySelectorAll('tr')
+                        if row.rowIndex > 3
+                            add .hidden to row
+                        else
+                            remove .hidden from row
+                        end
+                    end
+                else
+                    for row in constituency.querySelectorAll('tr')
+                        remove .hidden from row
+                    end
+                end
             else
                 add .hidden to constituency
             end
+        end
+    end
+
+    def toggleTopCandidates()
+        if #toggle-candidates.classList.contains('bg-blue-500')
+            set #toggle-candidates.textContent to 'Show all candidates per constituency'
+        else
+            set #toggle-candidates.textContent to 'Show top 3 candidates per constituency'
         end
     end
 </script>

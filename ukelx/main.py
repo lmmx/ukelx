@@ -100,7 +100,8 @@ async def get_constituencies(
     search: str = "", 
     parties: str = "", 
     regions: str = "", 
-    sort: str = Query("name", enum=["name", "majority", "swing", "runner_up_margin", "vote_share"])
+    sort: str = Query("name", enum=["name", "majority", "swing", "runner_up_margin", "vote_share"]),
+    top3: bool = False
 ):
     filtered_constituencies = constituencies
 
@@ -121,6 +122,9 @@ async def get_constituencies(
         grouped_constituencies[constituency.constituency_id].append(constituency)
     
     sorted_constituencies = sort_constituencies(grouped_constituencies.values(), sort)
+    
+    if top3:
+        sorted_constituencies = [group[:3] for group in sorted_constituencies]
     
     # Calculate summary
     summary = defaultdict(lambda: {'seats': 0, 'votes': 0})
@@ -145,7 +149,8 @@ async def get_constituencies(
             "request": request, 
             "constituencies": {c[0].constituency_id: c for c in sorted_constituencies},
             "summary": summary,
-            "party_colors": party_colors
+            "party_colors": party_colors,
+            "top3": top3
         }
     )
 
