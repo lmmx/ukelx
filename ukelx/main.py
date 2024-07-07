@@ -1,4 +1,5 @@
 from __future__ import annotations
+from collections import Counter
 import json
 import polars as pl
 from pathlib import Path
@@ -180,10 +181,12 @@ async def get_constituencies(
     # Calculate summary
     summary = defaultdict(lambda: {"seats": 0, "votes": 0})
     total_votes = 0
+    party_seats = Counter()
     for constituency_group in sorted_constituencies:
         winning_party = constituency_group[0].result_2024
         if winning_party:
             summary[winning_party]["seats"] += 1
+            party_seats[winning_party] += 1
         for candidate in constituency_group:
             if candidate.vote_number:
                 summary[candidate.party_code]["votes"] += candidate.vote_number
@@ -193,6 +196,9 @@ async def get_constituencies(
         summary[party]["vote_share"] = (
             (summary[party]["votes"] / total_votes) * 100 if total_votes > 0 else 0
         )
+
+    # Sort parties by number of seats won
+    sorted_parties = sorted(party_seats, key=party_seats.get, reverse=True)
 
     summary = dict(sorted(summary.items(), key=lambda x: x[1]["seats"], reverse=True))
 
@@ -204,6 +210,7 @@ async def get_constituencies(
             "summary": summary,
             "party_colors": party_colors,
             "top3": top3,
+            "sorted_parties": sorted_parties,
         },
     )
 

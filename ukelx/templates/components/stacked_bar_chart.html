@@ -1,0 +1,33 @@
+{% macro stacked_bar_chart(constituencies, party_colors) %}
+<div id="stacked-bar-chart" class="w-full h-80">
+    <svg width="100%" height="100%" preserveAspectRatio="none">
+        <g transform="translate(40,10)"> <!-- Add space for y-axis -->
+            {% set num_constituencies = constituencies | length %}
+            {% set bar_width = (100 - 5) / num_constituencies %} <!-- 5% for y-axis -->
+            {% set cumulative_y_dict = {} %}
+            {% for constituency_id, constituency_data in constituencies.items() %}
+                {% set x = loop.index0 * bar_width + 5 %} <!-- Offset for y-axis -->
+                {% set _ = cumulative_y_dict.update({constituency_id: 100}) %}
+                {% set total_votes = constituency_data | sum(attribute='vote_number') %}
+                {% for candidate in constituency_data %}
+                    {% if candidate.vote_number %}
+                        {% set height = (candidate.vote_number / total_votes * 100) if total_votes > 0 else 0 %}
+                        {% set y = cumulative_y_dict[constituency_id] - height %}
+                        <rect data-loop="{{ loop.index0 }}" data-cum-y="{{ cumulative_y_dict[constituency_id] }}" x="{{ x }}%" y="{{ y }}%" width="{{ bar_width }}%" height="{{ height }}%" fill="{{ party_colors.get(candidate.party_code, '#929292') }}">
+                            <title>{{ constituency_data[0].name }}: {{ candidate.party_code }} - {{ "%.2f"|format(height) }}%</title>
+                        </rect>
+                        {% set _ = cumulative_y_dict.update({constituency_id: y}) %}
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+            
+            <!-- Y-axis -->
+            <line x1="5%" y1="0%" x2="5%" y2="100%" stroke="black" />
+            {% for i in range(0, 101, 20) %}
+                <line x1="4%" y1="{{ 100 - i }}%" x2="5%" y2="{{ 100 - i }}%" stroke="black" />
+                <text x="0%" y="{{ 100 - i }}%" dy="0.3em" text-anchor="start" font-size="12">{{ i }}%</text>
+            {% endfor %}
+        </g>
+    </svg>
+</div>
+{% endmacro %}
