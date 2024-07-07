@@ -1,4 +1,4 @@
-{% macro stacked_bar_chart(constituencies, party_colors) %}
+{% macro stacked_bar_chart(constituencies, party_colors, party_antisort=None) %}
 <div id="stacked-bar-chart" class="w-full h-5/6 pt-10">
     <svg width="100%" height="100%" preserveAspectRatio="none">
         <g transform="translate(40,10)"> <!-- Add space for y-axis -->
@@ -9,7 +9,7 @@
                 {% set x = loop.index0 * bar_width + 5 %} <!-- Offset for y-axis -->
                 {% set _ = cumulative_y_dict.update({constituency_id: 100}) %}
                 {% set total_votes = constituency_data | sum(attribute='vote_number') %}
-		{% set sorted_candidates = constituency_data | sort_candidates(sorted_parties=party_colors) %}
+                {% set sorted_candidates = constituency_data | sort_candidates(sorted_parties=party_colors, party_antisort=party_antisort) %}
                 {% for candidate in sorted_candidates %}
                     {% if candidate.vote_number %}
                         {% set height = (candidate.vote_number / total_votes * 100) if total_votes > 0 else 0 %}

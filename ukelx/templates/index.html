@@ -99,6 +99,12 @@
                     <option value="{{ party_code }}">{{ party_name }}</option>
                 {% endfor %}
             </select>
+            <select id="party-antisort" class="px-4 py-2 bg-gray-200 rounded mr-2" _="on change call updateResults()">
+                <option value="">Anti-sort: None</option>
+                {% for party_code, party_name in party_names.items() %}
+                    <option value="{{ party_code }}">Anti-sort: {{ party_name }}</option>
+                {% endfor %}
+            </select>
             <button id="toggle-candidates" class="float-right px-4 py-2 bg-gray-200 rounded mr-2"
                     _="on click toggle .bg-blue-500 .text-white then call toggleTopCandidates() then call updateResults()">
                 Top 3 candidates

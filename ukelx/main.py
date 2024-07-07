@@ -141,6 +141,7 @@ async def get_constituencies(
     ),
     top3: bool = False,
     party_vote_share: str = "",
+    party_antisort: str = "",
 ):
     filtered_constituencies = constituencies
 
@@ -222,6 +223,7 @@ async def get_constituencies(
             "party_colors": party_colors,
             "top3": top3,
             "sorted_parties": sorted_parties,
+            "party_antisort": party_antisort,
         },
     )
 

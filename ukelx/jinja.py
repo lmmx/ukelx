@@ -18,9 +18,11 @@ def datetime_filter(timestamp):
     )
 
 
-def stacked_bar_sort_candidates(candidates, sorted_parties):
+def stacked_bar_sort_candidates(candidates, sorted_parties, party_antisort=None):
     sorted_parties = list(sorted_parties)
-    # print(f"Got {sorted_parties=}")
+    if party_antisort and party_antisort in sorted_parties:
+        sorted_parties.append(sorted_parties.pop(sorted_parties.index(party_antisort)))
+
     def party_sorter(candidate) -> int:
         party = candidate.party_code
         if party in sorted_parties:
@@ -30,7 +32,6 @@ def stacked_bar_sort_candidates(candidates, sorted_parties):
         return idx
 
     sorted_data = sorted(candidates, key=party_sorter)
-    # print([c.party_code for c in sorted_data])
     return sorted_data
 
 
