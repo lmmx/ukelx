@@ -30,7 +30,7 @@ def stacked_bar_sort_candidates(candidates, sorted_parties):
         return idx
 
     sorted_data = sorted(candidates, key=party_sorter)
-    print([c.party_code for c in sorted_data])
+    # print([c.party_code for c in sorted_data])
     return sorted_data
 
 
