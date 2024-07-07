@@ -3,14 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UK General Election Results</title>
+    <title>UK General Election Results 2024</title>
     <script src="https://unpkg.com/htmx.org@1.9.2"></script>
     <script src="https://unpkg.com/hyperscript.org@0.9.8"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 min-h-screen">
     <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold mb-8">UK General Election Results</h1>
+        <h1 class="text-3xl font-bold mb-8">UK General Election Results 2024</h1>
+	<p class="mb-6">Results data via <a class="text-blue-600" href="https://ig.ft.com/uk-general-election/2024/results/">FT</a> 📡.
+	   Website by <a class="text-blue-600" href="https://twitter.com/permutans">Louis Maddox</a>
+	   (<a class="text-blue-600" href="https://github.com/lmmx/ukelx">open source</a>).
+	   <em>Made with love, FastAPI, and HTMX <code><3</code></em>.</p>
         
         <input type="text" id="constituency-search" placeholder="Search constituencies..." 
                class="w-full p-2 border rounded mb-4"
