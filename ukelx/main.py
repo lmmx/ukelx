@@ -83,7 +83,7 @@ def group_constituencies(constituencies):
     return grouped
 
 
-def sort_constituencies(constituencies, sort_by):
+def sort_constituencies(constituencies, sort_by, party_vote_share=None):
     if sort_by == "name":
         return sorted(constituencies, key=lambda x: x[0].name)
     elif sort_by == "majority":
@@ -108,7 +108,17 @@ def sort_constituencies(constituencies, sort_by):
             ),
         )
     elif sort_by == "vote_share":
-        return sorted(constituencies, key=lambda x: x[0].vote_share or 0, reverse=True)
+        if party_vote_share:
+            return sorted(
+                constituencies,
+                key=lambda x: next(
+                    (c.vote_share or 0 for c in x if c.party_code == party_vote_share),
+                    0,
+                ),
+                reverse=True,
+            )
+        else:
+            return sorted(constituencies, key=lambda x: x[0].vote_share or 0, reverse=True)
     else:
         return constituencies
 
@@ -130,6 +140,7 @@ async def get_constituencies(
         "name", enum=["name", "majority", "swing", "runner_up_margin", "vote_share"]
     ),
     top3: bool = False,
+    party_vote_share: str = "",
 ):
     filtered_constituencies = constituencies
 
@@ -173,7 +184,7 @@ async def get_constituencies(
             if v[0].region in region_list
         }
 
-    sorted_constituencies = sort_constituencies(grouped_constituencies.values(), sort)
+    sorted_constituencies = sort_constituencies(grouped_constituencies.values(), sort, party_vote_share)
 
     if top3:
         sorted_constituencies = [group[:3] for group in sorted_constituencies]

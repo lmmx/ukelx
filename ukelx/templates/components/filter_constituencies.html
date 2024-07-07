@@ -28,8 +28,9 @@
             set sortBy to 'name'
         end
         set showTop3 to #toggle-candidates.classList.contains('bg-blue-500')
+        set partyVoteShare to #party-vote-share.value
 
-        set url to `/constituencies?search=${query}&parties_1st=${selectedParties1st.join(',')}&parties_2nd=${selectedParties2nd.join(',')}&parties_3rd=${selectedParties3rd.join(',')}&regions=${selectedRegions.join(',')}&sort=${sortBy}&top3=${showTop3}`
+        set url to `/constituencies?search=${query}&parties_1st=${selectedParties1st.join(',')}&parties_2nd=${selectedParties2nd.join(',')}&parties_3rd=${selectedParties3rd.join(',')}&regions=${selectedRegions.join(',')}&sort=${sortBy}&top3=${showTop3}&party_vote_share=${partyVoteShare}`
         
         console.log('url:', url)
         fetch `${url}`
