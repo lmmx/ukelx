@@ -57,7 +57,7 @@
         
         <div class="mb-4">
             <span class="font-bold mr-2">Sort by:</span>
-            {% set sort_options = {"name": "Name", "majority": "Majority", "swing": "Swing", "runner_up_margin": "Runner-up Margin"} %}
+            {% set sort_options = {"name": "Name", "majority": "Majority", "swing": "Swing", "runner_up_margin": "Runner-up Margin", "vote_share": "Vote Share"} %}
             {% for sort_value, sort_name in sort_options.items() %}
                 <button class="px-4 py-2 bg-gray-200 rounded mr-2 sort-button" 
                         _="on click 

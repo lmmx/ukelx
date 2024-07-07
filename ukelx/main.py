@@ -85,6 +85,8 @@ def sort_constituencies(constituencies, sort_by):
         return sorted(constituencies, key=lambda x: abs((x[0].majority_2024_percent or 0) - (x[0].majority_2019_percent or 0)), reverse=True)
     elif sort_by == "runner_up_margin":
         return sorted(constituencies, key=lambda x: (x[0].vote_number or 0) - (x[1].vote_number or 0) if len(x) > 1 else float('inf'))
+    elif sort_by == "vote_share":
+        return sorted(constituencies, key=lambda x: x[0].vote_share or 0, reverse=True)
     else:
         return constituencies
 
@@ -98,7 +100,7 @@ async def get_constituencies(
     search: str = "", 
     parties: str = "", 
     regions: str = "", 
-    sort: str = Query("name", enum=["name", "majority", "swing", "runner_up_margin"])
+    sort: str = Query("name", enum=["name", "majority", "swing", "runner_up_margin", "vote_share"])
 ):
     filtered_constituencies = constituencies
 
